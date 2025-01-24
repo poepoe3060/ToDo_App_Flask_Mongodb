@@ -1,2 +1,2 @@
 # Simple_ToDo_App
-This is my practice project by using React
+My practice project by using python Flask MongoDB.
