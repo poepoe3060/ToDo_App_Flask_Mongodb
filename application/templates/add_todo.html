@@ -8,7 +8,17 @@
 
                 <div class="form-group">
                     {{ form.name.label(class="form-control-label") }}
-                    {{ form.name(class="form-control") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control is-invalid") }}
+                        {% for error in form.name.errors  %}
+                            <div class="invalid-feedback">
+                                <span>{{ error }}</span>
+                            </div>
+                        {% endfor %}   
+                    {% else %}
+                            {{ form.name(class="form-control") }}
+                    {% endif %}
+
                 </div>
 
             </fieldset>
