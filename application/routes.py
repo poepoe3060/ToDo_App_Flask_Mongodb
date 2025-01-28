@@ -4,7 +4,7 @@ from .forms import TodoForm
 
 @app.route("/")
 def index():
-    return render_template("todos_view.html", title="Layout Page")
+    return render_template("layout.html", title="Layout Page")
 
 @app.route("/add_todo")
 def add_todo():
