@@ -8,11 +8,5 @@ app.config["MONGO_URI"] = "mongodb+srv://poepoe:poepoe@cluster0.u3ckb.mongodb.ne
 mongodb_client = PyMongo(app)
 db = mongodb_client.db  
 
-try:
-    print("Connected to MongoDB successfully!")
-    print("Existing collections:", db.list_collection_names())  
-except Exception as e:
-    print("MongoDB Connection Error:", e)
-
 
 from application import routes  
