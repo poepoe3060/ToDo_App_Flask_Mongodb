@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     {% for todo in todos %}
-        <div class="card p-3 m-3 {% if todo.completed == "True" %}bg-success text-black{% else %}bg-light{% endif %}">
+        <div class="card p-3 m-3 {% if todo.completed == "True" %}bg-transparent text-black{% else %}bg-light{% endif %}">
             <div class="card-body">
                 {% if todo.completed == "True" %}
                     <h5 class="card-title"><del>{{ todo.name }}</del></h5>
@@ -14,6 +14,9 @@
                 <p class="card-text {% if todo.completed == "True" %}text-black{% else %}text-dark{% endif %}">
                     {{ todo.description }}
                 </p>
+
+                <a href="{{ url_for('update_todo', id = todo._id) }}" class="btn btn-outline-info btn-sm">Update</a>
+                <a href="{{ url_for('delete_todo', id = todo._id) }}" class="btn btn-outline-danger btn-sm">Delete</a>
             </div>
         </div>
     {% endfor %}

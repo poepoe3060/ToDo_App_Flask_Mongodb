@@ -1,9 +1,12 @@
-from application import app
+from werkzeug.datastructures import RequestCacheControl
+from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import redirect
-from flask import render_template, flash, request
+from application import app
+from flask import render_template, flash, request, url_for, redirect
 from application import db
 from .forms import TodoForm
 from datetime import datetime
+from bson import ObjectId
 
 
 @app.route("/")
@@ -33,4 +36,38 @@ def add_todo():
     else:
         form = TodoForm()
     return render_template("add_todo.html", form = form)
-    
+
+
+@app.route("/update_todo/<id>", methods = ["Post", "GET"])
+def update_todo(id):
+    if request.method == "POST":
+        form = TodoForm(request.form)
+        todo_name = form.name.data
+        todo_description = form.description.data
+        completed = form.completed.data
+
+        db.todo_flask.find_one_and_update({"_id": ObjectId(id)}, {"$set": {
+            "name": todo_name,
+            "description": todo_description,
+            "completed": completed,
+            "date_created": datetime.utcnow()
+        }})
+
+        flash("Todo Successfully update", "success")
+        return redirect("/")
+
+    else:
+        form = TodoForm()
+        todo = db.todo_flask.find_one_or_404({"_id": ObjectId(id)})
+        form.name.data = todo.get("name", None)
+        form.description.data = todo.get("description", None)
+        form.completed.data = todo.get("completed", None)
+
+    return render_template("add_todo.html", form = form)
+
+
+@app.route("/delete_todo/<id>")
+def delete_todo(id):
+    db.todo_flask.find_one_and_delete({"_id": ObjectId(id)})
+    flash("Todo deleted", "success")
+    return redirect("/")
